@@ -6,10 +6,10 @@ metatata, and update XBMC. This does not alter the MythTV content at all.
 
 Requirements
 ------------
-[MythTV](http://www.mythtv.org)
-[XBCMnfo](https://github.com/bdwilson/XBMCnfo)
-[HandbrakeCLI](http://handbrake.fr/downloads2.php)
-[mythicalLibrarian](http://wiki.xbmc.org/?title=MythicalLibrarian#Installation)
+[MythTV](http://www.mythtv.org)<br>
+[XBCMnfo](https://github.com/bdwilson/XBMCnfo)<br>
+[HandbrakeCLI](http://handbrake.fr/downloads2.php)<br>
+[mythicalLibrarian](http://wiki.xbmc.org/?title=MythicalLibrarian#Installation)<br>
 
 MythTV Configuration
 --------------------
