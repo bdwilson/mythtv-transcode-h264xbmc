@@ -42,7 +42,7 @@ HANDBRAKECLI="/usr/local/bin/HandBrakeCLI"
 
 # Path to NFO file creater (see https://github.com/bdwilson/XBMCnfo)
 # Final filename will be passed as the last argument to this script
-TVNFO="/etc/sabnzbd/XBMCnfo.pl"
+TVNFO="/etc/mythtv/XBMCnfo.pl"
 TVARGS="-forcetitle -tvshow -usefirst -deldup -overwrite -duration -altimg"
 
 # optional addtional job to run after processing. Any addtl args can
@@ -62,7 +62,7 @@ ADDLARGS=""
 # your XBMC database:
 # mysql -u xbmc -pxbmc xbmc_video60 -e 'select strPath from path where strContent="tvshows"'
 XBMCSERVER="192.168.1.211:8080"
-XBMCBASEPATH="smb://user:pass@server/media/TV"
+XBMCBASEPATH="smb://user:pass@SERVER/media/TV"
 
 # a temporary working directory (must be writable by mythtv user)
 TEMPDIR="/tmp"
@@ -75,7 +75,7 @@ DATABASEPASSWORD="mythtv"
 INSTALLPREFIX="/usr/bin"
 
 # Base dir where your TV shows will be stored (Mapped as a TV share in XBMC)
-TVBASE="/storage/hellanzb/done/TV"
+TVBASE="/media/TV"
 
 # Who to trust if you get Season/Episode data from both MythTV and
 # MythicalLibrarian.  Either MYTHTV or MYTHICAL
@@ -257,7 +257,8 @@ if [ ! -z "$PROGRAMID" ]; then
 		EPISODENUM=$MYLEPISODENUM
 		TEPISODE=$MYLTEPISODE
 		PLOT=$MYLPLOT
-		TITLE=$MYLTITLE
+		#TITLE=$MYLTITLE  Always use show name from MythTV...4/25/2013
+		TITLE=$MTVTITLE
 	else 
 		SEASONDIR=$MTVSEASONDIR
 		SEASON=$MTVSEASON
@@ -366,15 +367,14 @@ if [ ! -z "$TITLE" ]; then
 	echo "$SCRIPT: Copying to $MYDIR/$BASENAME"
 	mv -f "$DIRNAME/$BASENAME" "$MYDIR/$BASENAME"
 	chmod 777 "$MYDIR/$BASENAME"
-	#echo "$SCRIPT: Running atv2xml"
-	#/data/hellanzb/sabnzb/scripts/atv2xml.pl -tvshow -usefirst -deldup -overwrite -duration -altimg "$MYDIR/$BASENAME"
+	TVNFORET=1
 	if [ -x "${TVNFO}" ]; then
 		echo "$SCRIPT: Running ${TVNFO}"
 		${TVNFO} ${TVARGS} "$MYDIR/$BASENAME"
 		TVNFORET=$?
 		echo "$SCRIPT: Returned $TVNFORET"
 	fi
-	if [ -x "${ADDLJOB}" ] && [ ${TVNFORET} -eq 1 ]; then
+	if [ -x "${ADDLJOB}" ] && [ "${TVNFORET}" -eq 1 ]; then
 		echo "$SCRIPT: Running additional job ${ADDLJOB} ${ADDLARGS} $MYDIR/$BASENAME"
 		${ADDLJOB} ${ADDLARGS} "$MYDIR/$BASENAME"
 	fi 
@@ -389,7 +389,6 @@ if [ ! -z "$TITLE" ]; then
 else 
 	echo "$SCRIPT: Not moving file ($DIRNAME/$BASENAME) or running any scraper scripts"
 fi
-
 if [ -f "$DIRNAME/$BASENAME2.tmp" ]; then
 	 rm -f "$DIRNAME/$BASENAME2.tmp" 
 fi
